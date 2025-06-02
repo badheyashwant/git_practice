@@ -11,6 +11,18 @@ connection = pymysql.connect(
     database='gitpractice',
     cursorclass=pymysql.cursors.DictCursor
 )
+# Ensure the 'users' table exists
+with connection.cursor() as cursor:
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(100) NOT NULL,
+            email VARCHAR(100) NOT NULL
+        )
+    """)
+    connection.commit()
+# app.py
+
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
@@ -38,3 +50,4 @@ if __name__ == "__main__":
     app.listen(8888)
     print("Server running on http://localhost:8888")
     tornado.ioloop.IOLoop.current().start()
+
